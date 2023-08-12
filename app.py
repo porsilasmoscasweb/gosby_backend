@@ -22,7 +22,10 @@ def findOnObj(arr, search_key, search_value, multiple):
     new_dictionary = []
 
     for obj in arr:
-        if (obj.get(search_key) == search_value):
+        sk = [obj.get(key) for key in search_key]
+
+        if sk == search_value:
+
             if not multiple:
                 return obj
 
@@ -44,7 +47,7 @@ def singleCurrencyRates():
     code = request.args.get('code')
     multiple = False
 
-    currency = findOnObj(currencyRates, 'from', code, multiple)
+    currency = findOnObj(currencyRates, ['from'], [code], multiple)
 
     return currency
 
@@ -54,9 +57,10 @@ def allTransactionsByCode():
     request
 
     code = request.args.get('code')
+    sku = request.args.get('sku')
     multiple = True
 
-    trans = findOnObj(transactions, 'currency', code, multiple)
+    trans = findOnObj(transactions, ['currency', 'sku'], [code, sku], multiple)
 
     return trans
 

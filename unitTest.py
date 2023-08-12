@@ -7,14 +7,20 @@ class TestMethod(unittest.TestCase):
         self.assertEqual(len(currencyRates), 4, "Should be 4.")
 
     def test_singleCurrencyRates(self):
-        currency = findOnObj(currencyRates, 'from', 'EUR', False)
+        currency = findOnObj(currencyRates, ['from'], ['EUR'], False)
 
         self.assertEqual(len(currency), 3, "Should be 3.")
 
     def test_allTransactionsByCode(self):
-        trans = findOnObj(transactions, 'currency', 'USD', True)
+        trans = findOnObj(transactions, ['currency'], ['USD'], True)
 
         self.assertEqual(len(trans), 3, "Should be 3.")
+
+    def test_allTransactionsByCodeAnSku(self):
+        trans = findOnObj(transactions, ['currency', 'sku'], [
+                          'USD', 'R2008'], True)
+
+        self.assertEqual(len(trans), 1, "Should be 1.")
 
 
 if __name__ == '__main__':
@@ -37,7 +43,10 @@ if __name__ == '__main__':
         new_dictionary = []
 
         for obj in arr:
-            if (obj.get(search_key) == search_value):
+            sk = [obj.get(key) for key in search_key]
+
+            if sk == search_value:
+
                 if not multiple:
                     return obj
 
