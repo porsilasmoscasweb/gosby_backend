@@ -26,6 +26,7 @@ def allCurrencyRates():
 
 @app.route('/currency-rates')
 def singleCurrencyRates():
+    request
     return currencyRates[0]
 
 
