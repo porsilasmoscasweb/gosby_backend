@@ -18,6 +18,19 @@ currencyRates = [
 ]
 
 
+def findOnObj(arr, search_key, search_value, multiple):
+    new_dictionary = []
+
+    for obj in arr:
+        if (obj.get(search_key) == search_value):
+            if not multiple:
+                return obj
+
+            new_dictionary.append(obj)
+
+    return new_dictionary
+
+
 @app.route('/all-currency-rates')
 def allCurrencyRates():
     request
@@ -29,25 +42,23 @@ def singleCurrencyRates():
 
     request
     code = request.args.get('code')
+    multiple = False
 
-    for currency in currencyRates:
-        for key, value in currency.items():
-            if (key == 'from' and value == code):
-                return currency
+    currency = findOnObj(currencyRates, 'from', code, multiple)
 
-    return {}
+    return currency
 
 
 @app.route('/all-transactions')
-def allTransactions():
+def allTransactionsByCode():
     request
-    return transactions
 
+    code = request.args.get('code')
+    multiple = True
 
-@app.route('/all-transactions-by')
-def allTransactionsBy():
-    request
-    return transactions[0]
+    trans = findOnObj(transactions, 'currency', code, multiple)
+
+    return trans
 
 
 if __name__ == '__main__':
