@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 
@@ -26,8 +26,16 @@ def allCurrencyRates():
 
 @app.route('/currency-rates')
 def singleCurrencyRates():
+
     request
-    return currencyRates[0]
+    code = request.args.get('code')
+
+    for currency in currencyRates:
+        for key, value in currency.items():
+            if (key == 'from' and value == code):
+                return currency
+
+    return {}
 
 
 @app.route('/all-transactions')
