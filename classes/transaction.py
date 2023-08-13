@@ -11,8 +11,6 @@ class Transaction(Master):
         {"sku": "B2009", "amount": "21.23", "currency": "USD"}
     ]
 
-    all = []
-
     def __init___(self, sku, amount, currency):
         self.sku = sku
         self.amount = amount
