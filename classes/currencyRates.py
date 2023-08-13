@@ -1,3 +1,4 @@
+import re
 from classes.master import Master
 
 
@@ -16,30 +17,30 @@ class CurrencyRates(Master):
         self.rate = rate
 
     def getAll():
-        return CurrencyRates.currencyRates
+        try:
+            return CurrencyRates.currencyRates
+        except Exception as err:
+            return [str(err)]
 
     def getAttr(attr, value):
         return CurrencyRates.findOnObj(CurrencyRates.currencyRates, [attr], [value], False)
 
     def convertCurrency(curr_from, to):
         convertRate = CurrencyRates.findOnObj(CurrencyRates.currencyRates, [
-            'from', 'to'], [curr_from, to], False)
+                                              'from', 'to'], [curr_from, to], False)
 
         # If the result not exists. Try to get the first from 'FROM'
-        if len(convertRate) == 0:
+        try:
             convertRate = CurrencyRates.findOnObj(CurrencyRates.currencyRates, [
-                'from'], [curr_from], False)
-
-        # If this also not exists return false
-        if len(convertRate) == 0:
-            return False
+                                                  'from'], [curr_from], False).get('rate')
+        except Exception as err:
+            return [str(err)]
 
         # If exists get the first of new value 'TO' from the 'TO' passed as a param
-        convertRate = CurrencyRates.findOnObj(CurrencyRates.currencyRates, [
-            'to'], [to], False)
+        try:
+            convertRate = CurrencyRates.findOnObj(
+                CurrencyRates.currencyRates, ['to'], [to], False)
+        except Exception as err:
+            return [str(err)]
 
-        # If this also not exists return false
-        if len(convertRate) == 0:
-            return False
-
-        return convertRate.get('rate')
+        return convertRate

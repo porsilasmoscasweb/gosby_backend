@@ -1,3 +1,4 @@
+import re
 from flask import Flask, request
 from classes.currencyRates import CurrencyRates
 from classes.transaction import Transaction
@@ -8,6 +9,18 @@ app = Flask(__name__)
 def allCurrencyRates():
     request
     return CurrencyRates.getAll()
+
+
+@app.route('/convert')
+def getRateConvert():
+    request
+
+    c_from = request.args.get('from')
+    c_to = request.args.get('to')
+
+    rate = CurrencyRates.convertCurrency(c_from, c_to)
+
+    return rate
 
 
 @app.route('/currency-rates')
@@ -35,6 +48,8 @@ def allTransactionsByCode():
 Get all attributes from request
 @return list
 '''
+
+
 def getArrRequestTrans(request, attributes):
     attrs = []
     vals = []

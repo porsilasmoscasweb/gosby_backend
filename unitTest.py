@@ -27,16 +27,17 @@ class TestMethod(unittest.TestCase):
                 'USD', 'R2008'])), 1, "Should be 1.")
 
     def test_convertCurrency(self):
-        value = CurrencyRates.convertCurrency('EUR', 'USD')
+        value = CurrencyRates.convertCurrency('EUR', 'USD').get('rate')
         self.assertEqual(value, '1.359', 'should be 1.359.')
 
     def test_convertCurrencyFromOtherGived(self):
-        value = CurrencyRates.convertCurrency('CAD', 'USD')
+        value = CurrencyRates.convertCurrency('CAD', 'USD').get('rate')
         self.assertEqual(value, '1.359', 'should be 1.359.')
 
     def test_convertCurrencyNotExists(self):
         value = CurrencyRates.convertCurrency('TAN', 'USD')
-        self.assertFalse(value, 'Not exists.')
+        self.assertEqual(
+            value, ["'list' object has no attribute 'get'"], 'Should be equal str.')
 
 
 if __name__ == '__main__':

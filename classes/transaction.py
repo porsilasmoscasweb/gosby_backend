@@ -19,7 +19,13 @@ class Transaction(Master):
         self.currency = currency
 
     def getAll():
-        return Transaction.transactions
+        try:
+            return Transaction.transactions
+        except Exception as err:
+            return [str(err)]
 
     def getAllAttr(attr, value):
-        return Transaction.findOnObj(Transaction.transactions, attr, value, True)
+        try:
+            return Transaction.findOnObj(Transaction.transactions, attr, value, True)
+        except Exception as err:
+            return [str(err)]

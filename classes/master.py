@@ -1,16 +1,23 @@
+import json
+
+
 class Master:
 
     def findOnObj(arr, search_key, search_value, multiple):
         new_dictionary = []
 
-        for obj in arr:
-            sk = [obj.get(key) for key in search_key]
+        try:
+            for obj in arr:
 
-            if sk == search_value:
+                sk = [obj.get(key) for key in search_key]
 
-                if not multiple:
-                    return obj
+                if sk == search_value:
 
-                new_dictionary.append(obj)
+                    if not multiple:
+                        return obj
 
-        return new_dictionary
+                    new_dictionary.append(obj)
+
+            return new_dictionary
+        except AttributeError as err:
+            return [str(err)]
