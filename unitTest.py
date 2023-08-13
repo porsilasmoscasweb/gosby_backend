@@ -26,6 +26,18 @@ class TestMethod(unittest.TestCase):
             ['currency', 'sku'], [
                 'USD', 'R2008'])), 1, "Should be 1.")
 
+    def test_convertCurrency(self):
+        value = CurrencyRates.convertCurrency('EUR', 'USD')
+        self.assertEqual(value, '1.359', 'should be 1.359.')
+
+    def test_convertCurrencyFromOtherGived(self):
+        value = CurrencyRates.convertCurrency('CAD', 'USD')
+        self.assertEqual(value, '1.359', 'should be 1.359.')
+
+    def test_convertCurrencyNotExists(self):
+        value = CurrencyRates.convertCurrency('TAN', 'USD')
+        self.assertFalse(value, 'Not exists.')
+
 
 if __name__ == '__main__':
     unittest.main()
