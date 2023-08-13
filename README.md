@@ -29,8 +29,7 @@ source bin/activate
 
 ### INSTALL LIB's
 
-pip install Flask
-pip install flask-requests
+pip3 install Flask && pip3 install flask-requests
 
 ### SET THE FLASK_APP
 

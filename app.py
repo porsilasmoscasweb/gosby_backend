@@ -1,53 +1,21 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
+from classes.currencyRates import CurrencyRates
+from classes.transaction import Transaction
 app = Flask(__name__)
-
-
-transactions = [
-    {"sku": "T2006", "amount": "10.00", "currency": "USD"},
-    {"sku": "M2007", "amount": "34.57", "currency": "CAD"},
-    {"sku": "R2008", "amount": "17.95", "currency": "USD"},
-    {"sku": "T2006", "amount": "7.63", "currency": "EUR"},
-    {"sku": "B2009", "amount": "21.23", "currency": "USD"}
-]
-
-currencyRates = [
-    {"from": "EUR", "to": "USD", "rate": "1.359"},
-    {"from": "CAD", "to": "EUR", "rate": "0.732"},
-    {"from": "USD", "to": "EUR", "rate": "0.736"},
-    {"from": "EUR", "to": "CAD", "rate": "1.366"}
-]
-
-
-def findOnObj(arr, search_key, search_value, multiple):
-    new_dictionary = []
-
-    for obj in arr:
-        sk = [obj.get(key) for key in search_key]
-
-        if sk == search_value:
-
-            if not multiple:
-                return obj
-
-            new_dictionary.append(obj)
-
-    return new_dictionary
 
 
 @app.route('/all-currency-rates')
 def allCurrencyRates():
     request
-    return currencyRates
+    return CurrencyRates.getAll()
 
 
 @app.route('/currency-rates')
 def singleCurrencyRates():
-
     request
     code = request.args.get('code')
-    multiple = False
 
-    currency = findOnObj(currencyRates, ['from'], [code], multiple)
+    currency = CurrencyRates.getAttr('from', code)
 
     return currency
 
@@ -56,13 +24,31 @@ def singleCurrencyRates():
 def allTransactionsByCode():
     request
 
-    code = request.args.get('code')
-    sku = request.args.get('sku')
-    multiple = True
+    attrs = getArrRequestTrans(request, ['currency', 'sku'])
 
-    trans = findOnObj(transactions, ['currency', 'sku'], [code, sku], multiple)
+    trans = Transaction.getAllAttr(attrs[0], attrs[1])
 
     return trans
+
+
+'''
+Get all attributes from request
+@return list
+'''
+def getArrRequestTrans(request, attributes):
+    attrs = []
+    vals = []
+
+    for attr in attributes:
+        value = request.args.get(attr)
+
+        if value is not None:
+            attrs.insert(-1, attr)
+            vals.insert(-1, value)
+
+    list1 = (attrs, vals)
+
+    return list1
 
 
 if __name__ == '__main__':
